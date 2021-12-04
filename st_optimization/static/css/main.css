@@ -1,0 +1,24 @@
+.content {
+  padding-top: 110px; /* height of header + navbar*/
+  padding-right: 30px;
+  padding-bottom: 30px;
+  padding-left: 30px;
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    top: 54px;
+  }
+
+  .pagewide {
+    height: 60px;
+  }
+
+  nav .navbar-nav li a:not(.dropdown-menu *) {
+    color: white !important;
+  }
+
+  nav .navbar-nav li a:hover {
+    color: grey !important;
+  }
+}
