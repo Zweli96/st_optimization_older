@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import re
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'st_optimization.middleware.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'st_optimization.urls'
@@ -125,6 +127,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = '/login/'
+
+LOGIN_EXEMPT_URLS = (r'^logout/$',)
 
 STATICFILES_DIRS = [BASE_DIR / "static",
                     '/var/www/static/', ]

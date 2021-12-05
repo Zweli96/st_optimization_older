@@ -39,8 +39,28 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Sample Volumes</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Routes</a>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            href="#"
+            id="navbarDropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Routes
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'make_routes' %}"
+              >Make Routes</a
+            >
+            <a class="dropdown-item" href="{% url 'facilities' %}"
+              >View Routes</a
+            >
+            <a class="dropdown-item" href="{% url 'health_workers' %}"
+              >Saved Routes</a
+            >
+          </div>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Reports</a>

@@ -22,3 +22,13 @@
     color: grey !important;
   }
 }
+
+.scrollable-routes {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+#data_table_routes th,
+td {
+  white-space: nowrap;
+}

@@ -21,7 +21,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.css"
+      href="https://cdn.datatables.net/v/bs4/dt-1.11.3/fc-4.0.1/datatables.min.css"
     />
   </head>
   <body>
@@ -67,10 +67,14 @@
       type="text/javascript"
       src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"
     ></script>
-    <script>
-      $(document).ready(function () {
-        $("#data_table").DataTable();
-      });
-    </script>
+    <script
+      type="text/javascript"
+      src="https://cdn.datatables.net/fixedcolumns/4.0.1/js/dataTables.fixedColumns.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"
+    ></script>
+    <script src="{% static 'js/main.js' %}"></script>
   </body>
 </html>

@@ -106,7 +106,7 @@ def createDistrict(request):
         form = DistrictForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('home')
 
     return render(request, 'sample_volumes/district_form.html', context)
 
@@ -120,7 +120,7 @@ def updateDistrict(request, pk):
         form = DistrictForm(request.POST, instance=district)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('home')
 
     context = {'form': form}
     return render(request, 'sample_volumes/district_form.html', context)
@@ -130,7 +130,7 @@ def deleteDistrict(request, pk):
     district = District.objects.get(id=pk)
     if request.method == "POST":
         district.delete()
-        return redirect('/')
+        return redirect('home')
     context = {'item': district}
     return render(request, 'sample_volumes/delete.html', context)
 
@@ -144,7 +144,7 @@ def createFacility(request):
         form = FacilityForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('home')
 
     return render(request, 'sample_volumes/facility_form.html', context)
 
@@ -158,7 +158,7 @@ def updateFacility(request, pk):
         form = FacilityForm(request.POST, instance=facility)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('home')
 
     context = {'form': form}
     return render(request, 'sample_volumes/facility_form.html', context)
@@ -168,7 +168,7 @@ def deleteFacility(request, pk):
     facility = Facility.objects.get(id=pk)
     if request.method == "POST":
         facility.delete()
-        return redirect('/')
+        return redirect('home')
     context = {'item': facility}
     return render(request, 'sample_volumes/delete.html', context)
 
@@ -182,7 +182,7 @@ def createHealth_Worker(request):
         form = Health_WorkerForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('home')
 
     return render(request, 'sample_volumes/health_worker_form.html', context)
 
@@ -196,7 +196,7 @@ def updateHealth_Worker(request, pk):
         form = Health_WorkerForm(request.POST, instance=health_worker)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('home')
 
     context = {'form': form}
     return render(request, 'sample_volumes/health_worker_form.html', context)
@@ -206,6 +206,11 @@ def deleteHealth_Worker(request, pk):
     health_worker = Health_Worker.objects.get(id=pk)
     if request.method == "POST":
         health_worker.delete()
-        return redirect('/')
+        return redirect('home')
     context = {'item': health_worker}
     return render(request, 'sample_volumes/delete.html', context)
+
+
+def makeRoutes(request, pk=""):
+    context = {}
+    return render(request, 'sample_volumes/make_routes.html')
