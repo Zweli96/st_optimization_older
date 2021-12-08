@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from datetime import date
+from datetime import date, datetime
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -59,7 +59,7 @@ class Facility(models.Model):
     name = models.CharField(max_length=200, null=True)
     district = models.ForeignKey(
         District, null=True, on_delete=models.SET_NULL)
-    facility_code = models.CharField(max_length=200, null=True)
+    facility_code = models.CharField(max_length=200, null=True, unique=True)
     operator = models.CharField(
         max_length=200, choices=FACILITY_OPERATOR, null=True)
     facility_type = models.CharField(
@@ -113,12 +113,32 @@ class Facility(models.Model):
         #     return sample.volume
 
 
+class SampleType(models.Model):
+    sample_type = models.CharField(max_length=200, null=True)
+    sample_type_long = models.CharField(max_length=200, null=True)
+    sample_code = models.IntegerField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL)
+    edited_at = models.DateField(auto_now=True)
+    # edited_by = models.ForeignKey(
+    #     User, null=True, blank=True, on_delete=models.SET_NULL)
+    # deleted_at = models.DateTimeField(blank=True, null=True)
+    # deleted_by = models.ForeignKey(to, on_delete)
+    status = models.CharField(max_length=200, choices=STATUS, null=True)
+
+    def __str__(self):
+        return self.sample_type
+
+
 class Sample_Volumes(models.Model):
     facility = models.ForeignKey(
         Facility, null=True, on_delete=models.SET_NULL)
-    sample_type = models.CharField(
-        max_length=200, null=True, choices=SAMPLE_TYPE)
+    sample_type = models.ForeignKey(
+        SampleType, null=True, on_delete=models.SET_NULL)
     volume = models.IntegerField(default=0)
+    reported_date = models.DateTimeField(default=date.today, null=True)
+    reported_by = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL)
@@ -131,23 +151,6 @@ class Sample_Volumes(models.Model):
 
     def __str__(self):
         return f'{self.facility.district}_{self.facility}_{self.sample_type}_{self.created_at.strftime("%d-%m-%Y")}'
-
-
-class Sample_Types(models.Model):
-    test = models.CharField(max_length=200, null=True)
-    test_name_long = models.CharField(max_length=200, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL)
-    edited_at = models.DateField(auto_now=True)
-    # edited_by = models.ForeignKey(
-    #     User, null=True, blank=True, on_delete=models.SET_NULL)
-    # deleted_at = models.DateTimeField(blank=True, null=True)
-    # deleted_by = models.ForeignKey(to, on_delete)
-    status = models.CharField(max_length=200, choices=STATUS, null=True)
-
-    def __str__(self):
-        return self.test
 
 
 class Health_Worker(models.Model):

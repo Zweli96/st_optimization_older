@@ -9,7 +9,7 @@
         <select
           class="custom-select mr-sm-2"
           name="district"
-          id="inlineFormCustomSelect"
+          id="select_district"
         >
           {% comment %} Fix this {% if %} {% endif %} {% endcomment %}
 
@@ -18,6 +18,13 @@
           <option value="{{district.id}}">{{district.name}}</option>
           {% endfor %}
         </select>
+        <script>
+          var selected_district = "{{selected_district}}";
+          document.addEventListener("DOMContentLoaded", function (event) {
+            document.getElementById("select_district").value =
+              selected_district;
+          });
+        </script>
         <button type="submit" class="btn btn-primary btn-sm mb-2">
           Search
         </button>

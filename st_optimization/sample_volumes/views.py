@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
-from .models import Facility, District, Health_Worker, Courier
-from .forms import DistrictForm, FacilityForm, Health_WorkerForm, CreateUserForm
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-
 from django.contrib.auth.forms import UserCreationForm
+from .models import Facility, District, Health_Worker, Courier
+from .forms import DistrictForm, FacilityForm, Health_WorkerForm, CreateUserForm
+from datetime import datetime, timedelta
+
 
 # Create your views here.
 
@@ -49,14 +48,16 @@ def registerUser(request):
 
 def dashboard(request, pk=''):
 
+    context = {}
     districts = District.objects.order_by('name')
+
     selected_district = ""
 
     if request.method == 'POST':
         selected_district = request.POST['district']
 
     if selected_district:
-        print(selected_district)
+        context.update({'selected_district': selected_district})
         facilities = Facility.objects.filter(district=selected_district)
         facility_count = facilities.count()
     else:
@@ -64,8 +65,9 @@ def dashboard(request, pk=''):
         facilities = Facility.objects.all()
         facility_count = facilities.count()
 
-    context = {'facilities': facilities,
-               'facility_count': facility_count, 'districts': districts}
+    context.update({'facilities': facilities,
+                   'facility_count': facility_count, 'districts': districts})
+
     return render(request, 'sample_volumes/dashboard.html', context)
 
 
@@ -213,4 +215,33 @@ def deleteHealth_Worker(request, pk):
 
 def makeRoutes(request, pk=""):
     context = {}
-    return render(request, 'sample_volumes/make_routes.html')
+    districts = District.objects.order_by('name')
+    date_list = []
+
+    for i in range(0, 7):
+        date_list.append({
+            "index": i,
+            "date": (datetime.now() - timedelta(days=i)),
+            "date_string": (datetime.now() - timedelta(days=i)).strftime("%a-%d-%b")
+        })
+
+    date_list.reverse()
+
+    facilities = ""
+
+    selected_district = ""
+
+    if request.method == 'POST':
+        selected_district = districts.get(id=request.POST['district'])
+
+    if selected_district:
+        context.update({'selected_district': selected_district})
+        facilities = Facility.objects.filter(district=selected_district.id)
+
+    route_status = {"status": "not_published",
+                    "badge_color": "danger",
+                    "display_text": "Not Published", }
+
+    context.update({'districts': districts,
+                   'route_status': route_status, 'facilities': facilities, 'date_list': date_list})
+    return render(request, 'sample_volumes/make_routes.html', context)
