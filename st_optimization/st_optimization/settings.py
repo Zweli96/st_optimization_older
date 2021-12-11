@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sample_volumes',
+    'sample_volumes.apps.SampleVolumesConfig',
     'fontawesomefree',
     'phonenumber_field',
 ]

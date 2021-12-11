@@ -4,6 +4,8 @@ from dataUpdater import dataFetch
 
 
 def start():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(dataFetch.updateData, 'interval', minutes=10)
-    scheduler.start()
+    # scheduler = BackgroundScheduler()
+    # scheduler.add_job(dataFetch.updateData, 'interval', minutes=10)
+    # scheduler.start()
+    # dataFetch.updateData()
+    print('start')

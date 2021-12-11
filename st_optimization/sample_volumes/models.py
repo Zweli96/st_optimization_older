@@ -25,10 +25,10 @@ FACILITY_TYPE = (
 )
 
 SAMPLE_TYPE = (
-    ('VL', 'VL'),
-    ('EID', 'EID'),
-    ('TB', 'TB'),
-    ('Other', 'Other'),
+    ('1', 'VL'),
+    ('2', 'EID'),
+    ('3', 'TB'),
+    ('4', 'Other'),
 )
 
 DISTRICT_REGIONS = (
@@ -77,13 +77,15 @@ class Facility(models.Model):
     def __str__(self):
         return self.name
 
-    def get_daily_sample_volumes(self):
-        today = date.today()
+    def get_daily_sample_volumes(self, format='types'):
+        # today = date.today()
+        today = date(2021, 12, 8)
 
         # samples = self.sample_volumes_set.all()
 
         samples = self.sample_volumes_set.filter(
-            created_at__year=today.year, created_at__month=today.month, created_at__day=today.day)
+            reported_date__year=today.year, reported_date__month=today.month, reported_date__day=today.day)
+        # reported_date__year=2021, reported_date__month=12, reported_date__day=6
 
         if samples.count() == 0:
             return 'Not yet reported'
@@ -94,19 +96,22 @@ class Facility(models.Model):
 
         for s in SAMPLE_TYPE:
             sample = samples.filter(sample_type=s[0]).order_by(
-                '-created_at').first()
+                '-reported_date').first()
 
             if sample:
-                volumes[s[0]] = sample.volume
+                volumes[s[1]] = sample.volume
                 total_volumes += sample.volume
             else:
-                volumes[s[0]] = 'NA'
+                volumes[s[1]] = 'NA'
 
         for key, value in volumes.items():
             volume_string += f'{key}: {value}, '
 
         volume_string = volume_string[:-2]
-        return volume_string
+        if format == "types":
+            return volume_string
+        elif format == "total":
+            return
 
         # return samples
         # for sample in samples:
@@ -137,12 +142,12 @@ class Sample_Volumes(models.Model):
     sample_type = models.ForeignKey(
         SampleType, null=True, on_delete=models.SET_NULL)
     volume = models.IntegerField(default=0)
-    reported_date = models.DateTimeField(default=date.today, null=True)
+    reported_date = models.DateTimeField(null=True)
     reported_by = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL)
-    edited_at = models.DateField(auto_now=True)
+    edited_at = models.DateTimeField(auto_now=True)
     # edited_by = models.ForeignKey(
     #     User, null=True, blank=True, on_delete=models.SET_NULL)
     # deleted_at = models.DateTimeField(blank=True, null=True)
@@ -150,7 +155,7 @@ class Sample_Volumes(models.Model):
     status = models.CharField(max_length=200, choices=STATUS, null=True)
 
     def __str__(self):
-        return f'{self.facility.district}_{self.facility}_{self.sample_type}_{self.created_at.strftime("%d-%m-%Y")}'
+        return f'{self.facility.district}_{self.facility}_{self.sample_type}_{self.reported_date.strftime("%d-%m-%Y")}'
 
 
 class Health_Worker(models.Model):
